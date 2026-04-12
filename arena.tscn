@@ -122,6 +122,9 @@ texture = ExtResource("8")
 centered = false
 offset = Vector2(0, -10)
 
+[node name="Music" type="AudioStreamPlayer" parent="."]
+volume_db = -10.0
+
 [node name="Enemies" type="Node" parent="." unique_id=1779727136]
 
 [node name="TypingEngine" type="Node" parent="." unique_id=875307871]

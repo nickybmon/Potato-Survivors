@@ -14,6 +14,15 @@ func _ready() -> void:
 	$WaveManager.enemy_reached_center.connect(_on_enemy_reached_center)
 	$HUD.update_score(_score)
 	$HUD.update_lives(_lives)
+	_start_music()
+
+
+func _start_music() -> void:
+	var stream := load("res://Assets/topdown_shooter_assets/Mecha_Future_Looped.mp3")
+	if stream is AudioStreamMP3:
+		stream.loop = true
+		$Music.stream = stream
+		$Music.play()
 
 
 func _on_enemy_destroyed(enemy_pos: Vector2) -> void:
