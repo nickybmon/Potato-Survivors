@@ -6,6 +6,9 @@
 [ext_resource type="Script" uid="uid://be1q8ca13caxb" path="res://hud.gd" id="4"]
 [ext_resource type="Texture2D" uid="uid://bkme3ohtjw0c5" path="res://Assets/topdown_shooter_assets/sWall.png" id="5"]
 [ext_resource type="Texture2D" uid="uid://dlcfc5sdreeld" path="res://Assets/topdown_shooter_assets/sPlayerIdle_strip4.png" id="6"]
+[ext_resource type="Texture2D" uid="uid://dem8pcp358rhw" path="res://Assets/topdown_shooter_assets/sPlayerRun_strip7.png" id="7"]
+[ext_resource type="Texture2D" uid="uid://cg5snvij6h4sn" path="res://Assets/topdown_shooter_assets/sGun.png" id="8"]
+[ext_resource type="Script" path="res://player.gd" id="9"]
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_pi0"]
 atlas = ExtResource("6")
@@ -22,6 +25,34 @@ region = Rect2(80, 0, 40, 40)
 [sub_resource type="AtlasTexture" id="AtlasTexture_pi3"]
 atlas = ExtResource("6")
 region = Rect2(120, 0, 40, 40)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_pr0"]
+atlas = ExtResource("7")
+region = Rect2(0, 0, 40, 40)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_pr1"]
+atlas = ExtResource("7")
+region = Rect2(40, 0, 40, 40)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_pr2"]
+atlas = ExtResource("7")
+region = Rect2(80, 0, 40, 40)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_pr3"]
+atlas = ExtResource("7")
+region = Rect2(120, 0, 40, 40)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_pr4"]
+atlas = ExtResource("7")
+region = Rect2(160, 0, 40, 40)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_pr5"]
+atlas = ExtResource("7")
+region = Rect2(200, 0, 40, 40)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_pr6"]
+atlas = ExtResource("7")
+region = Rect2(240, 0, 40, 40)
 
 [sub_resource type="SpriteFrames" id="SpriteFrames_player"]
 animations = [{
@@ -41,6 +72,32 @@ animations = [{
 "loop": true,
 "name": &"idle",
 "speed": 8.0
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_pr0")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_pr1")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_pr2")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_pr3")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_pr4")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_pr5")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_pr6")
+}],
+"loop": true,
+"name": &"run",
+"speed": 12.0
 }]
 
 [node name="Arena" type="Node2D" unique_id=291634935]
@@ -54,10 +111,16 @@ stretch_mode = 0
 
 [node name="Player" type="Node2D" parent="." unique_id=1067011971]
 position = Vector2(640, 360)
+script = ExtResource("9")
 
 [node name="Visual" type="AnimatedSprite2D" parent="Player" unique_id=1824321282]
 sprite_frames = SubResource("SpriteFrames_player")
 autoplay = "idle"
+
+[node name="Gun" type="Sprite2D" parent="Player"]
+texture = ExtResource("8")
+centered = false
+offset = Vector2(0, -10)
 
 [node name="Enemies" type="Node" parent="." unique_id=1779727136]
 

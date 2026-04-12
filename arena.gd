@@ -1,6 +1,7 @@
 extends Node2D
 
 const STARTING_LIVES := 3
+const BulletScene := preload("res://bullet.tscn")
 
 var _score: int = 0
 var _lives: int = STARTING_LIVES
@@ -15,9 +16,12 @@ func _ready() -> void:
 	$HUD.update_lives(_lives)
 
 
-func _on_enemy_destroyed() -> void:
+func _on_enemy_destroyed(enemy_pos: Vector2) -> void:
 	_score += 10
 	$HUD.update_score(_score)
+	var bullet: Node2D = BulletScene.instantiate()
+	bullet.setup($Player.global_position, enemy_pos)
+	add_child(bullet)
 
 
 func _on_enemy_reached_center() -> void:

@@ -40,5 +40,6 @@ func die() -> void:
 	died.emit()
 	$Visual.play("dead")
 	$WordLabel.visible = false
+	$DeathSound.play()
 	await get_tree().create_timer(0.35).timeout
 	queue_free()

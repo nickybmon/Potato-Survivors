@@ -45,6 +45,7 @@ func _spawn_enemy() -> void:
 	var enemy: Node2D = ENEMY_SCENE.instantiate()
 	enemy.word = WordBank.get_word(_difficulty())
 	enemy.position = _random_edge()
+	enemy.add_to_group("enemies")
 	enemy.reached_center.connect(func(): enemy_reached_center.emit())
 	enemy.died.connect(_on_enemy_died)
 	get_parent().get_node("Enemies").add_child(enemy)
