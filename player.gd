@@ -19,9 +19,12 @@ func _process(delta: float) -> void:
 		_wander_timer = randf_range(1.0, 2.5)
 
 	var avoidance := Vector2.ZERO
-	for enemy in get_tree().get_nodes_in_group("enemies"):
-		var diff := global_position - enemy.global_position
-		var dist := diff.length()
+	for node in get_tree().get_nodes_in_group("enemies"):
+		var enemy := node as Node2D
+		if enemy == null:
+			continue
+		var diff: Vector2 = global_position - enemy.global_position
+		var dist: float = diff.length()
 		if dist < AVOID_RADIUS and dist > 0.0:
 			avoidance += diff.normalized() * (1.0 - dist / AVOID_RADIUS)
 
@@ -53,8 +56,11 @@ func _aim_gun() -> void:
 		target_pos = aim_target.global_position
 	else:
 		var nearest_dist := INF
-		for enemy in get_tree().get_nodes_in_group("enemies"):
-			var d := global_position.distance_to(enemy.global_position)
+		for node in get_tree().get_nodes_in_group("enemies"):
+			var enemy := node as Node2D
+			if enemy == null:
+				continue
+			var d: float = global_position.distance_to(enemy.global_position)
 			if d < nearest_dist:
 				nearest_dist = d
 				target_pos = enemy.global_position
