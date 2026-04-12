@@ -1,6 +1,6 @@
 extends Node2D
 
-const SPEED := 80.0
+const SPEED := 150.0
 const CENTER := Vector2(640.0, 360.0)
 
 signal reached_center
