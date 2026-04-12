@@ -1,24 +1,22 @@
 extends Node2D
 
-const AVOID_RADIUS := 160.0
-const SPEED := 100.0
+const AVOID_RADIUS := 200.0
+const SPEED := 120.0
 const ARENA_MIN := Vector2(80.0, 60.0)
 const ARENA_MAX := Vector2(1200.0, 660.0)
+const CENTER := Vector2(640.0, 360.0)
+const GUN_ORBIT_RADIUS := 14.0
 
 @onready var _visual: AnimatedSprite2D = $Visual
 @onready var _gun: Sprite2D = $Gun
 
-var _wander_dir: Vector2 = Vector2.RIGHT
-var _wander_timer: float = 0.0
+
+func _ready() -> void:
+	add_to_group("player")
 
 
 func _process(delta: float) -> void:
-	_wander_timer -= delta
-	if _wander_timer <= 0.0:
-		_wander_dir = Vector2(randf_range(-1.0, 1.0), randf_range(-1.0, 1.0)).normalized()
-		_wander_timer = randf_range(1.0, 2.5)
-
-	var avoidance := Vector2.ZERO
+	var flee := Vector2.ZERO
 	for node in get_tree().get_nodes_in_group("enemies"):
 		var enemy := node as Node2D
 		if enemy == null:
@@ -26,13 +24,15 @@ func _process(delta: float) -> void:
 		var diff: Vector2 = global_position - enemy.global_position
 		var dist: float = diff.length()
 		if dist < AVOID_RADIUS and dist > 0.0:
-			avoidance += diff.normalized() * (1.0 - dist / AVOID_RADIUS)
+			flee += diff.normalized() * (1.0 - dist / AVOID_RADIUS)
 
 	var move := Vector2.ZERO
-	if avoidance.length() > 0.05:
-		move = avoidance.normalized() * SPEED
+	if flee.length() > 0.01:
+		move = flee.normalized() * SPEED
 	else:
-		move = _wander_dir * SPEED * 0.35
+		var to_center: Vector2 = CENTER - global_position
+		if to_center.length() > 30.0:
+			move = to_center.normalized() * SPEED * 0.25
 
 	position += move * delta
 	position.x = clampf(position.x, ARENA_MIN.x, ARENA_MAX.x)
@@ -66,6 +66,7 @@ func _aim_gun() -> void:
 				target_pos = enemy.global_position
 
 	if target_pos != Vector2.ZERO:
-		var angle := (target_pos - global_position).angle()
+		var angle: float = (target_pos - global_position).angle()
+		_gun.position = Vector2(cos(angle), sin(angle)) * GUN_ORBIT_RADIUS
 		_gun.rotation = angle
 		_gun.flip_v = absf(angle) > PI * 0.5

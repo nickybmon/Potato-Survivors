@@ -1,6 +1,6 @@
 extends Node
 
-signal enemy_destroyed(enemy_pos: Vector2)
+signal word_completed(enemy: Node2D)
 signal progress_updated(word: String, progress: int)
 
 var _target: Node2D = null
@@ -65,9 +65,8 @@ func get_target() -> Node2D:
 
 func _destroy_target() -> void:
 	var enemy := _target
-	var enemy_pos := enemy.global_position
 	_target = null
 	_progress = 0
 	progress_updated.emit("", 0)
-	enemy_destroyed.emit(enemy_pos)
-	enemy.die()
+	word_completed.emit(enemy)
+	# enemy.die() is called by the bullet on arrival

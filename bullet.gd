@@ -2,24 +2,29 @@ extends Node2D
 
 const SPEED := 700.0
 
-var _direction: Vector2 = Vector2.ZERO
 var _from: Vector2 = Vector2.ZERO
-var _target_pos: Vector2 = Vector2.ZERO
+var _target: Node2D = null
 
 
-func setup(from: Vector2, to: Vector2) -> void:
+func setup(from: Vector2, target: Node2D) -> void:
 	_from = from
-	_target_pos = to
-	_direction = (to - from).normalized()
+	_target = target
 
 
 func _ready() -> void:
 	global_position = _from
-	rotation = _direction.angle()
+	if is_instance_valid(_target):
+		rotation = (_target.global_position - _from).angle()
 	$Sound.play()
 
 
 func _process(delta: float) -> void:
-	position += _direction * SPEED * delta
-	if global_position.distance_to(_target_pos) < 12.0:
+	if not is_instance_valid(_target):
+		queue_free()
+		return
+	var dir: Vector2 = (_target.global_position - global_position).normalized()
+	rotation = dir.angle()
+	position += dir * SPEED * delta
+	if global_position.distance_to(_target.global_position) < 12.0:
+		_target.die()
 		queue_free()
