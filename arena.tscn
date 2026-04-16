@@ -169,13 +169,3 @@ offset_bottom = 710.0
 theme_override_font_sizes/normal_font_size = 24
 bbcode_enabled = true
 
-[node name="GameOverLabel" type="Label" parent="HUD" unique_id=651211819]
-visible = false
-offset_left = 390.0
-offset_top = 300.0
-offset_right = 890.0
-offset_bottom = 380.0
-theme_override_font_sizes/font_size = 64
-text = "GAME OVER"
-horizontal_alignment = 1
-vertical_alignment = 1

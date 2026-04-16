@@ -26,6 +26,7 @@ window/stretch/aspect="keep"
 [autoload]
 
 WordBank="*res://word_bank.gd"
+ScoreManager="*res://score_manager.gd"
 
 [physics]
 

@@ -13,6 +13,7 @@ func _ready() -> void:
 	$TypingEngine.progress_updated.connect($HUD.update_typed)
 	$WaveManager.wave_started.connect($HUD.update_wave)
 	$WaveManager.enemy_reached_center.connect(_on_enemy_reached_center)
+	$HUD.restart_requested.connect(_on_restart)
 	$HUD.update_score(_score)
 	$HUD.update_lives(_lives)
 	_start_music()
@@ -49,4 +50,10 @@ func _on_enemy_reached_center() -> void:
 
 func _game_over() -> void:
 	get_tree().paused = true
-	$HUD.show_game_over()
+	ScoreManager.add_score(_score)
+	$HUD.show_game_over(_score)
+
+
+func _on_restart() -> void:
+	get_tree().paused = false
+	get_tree().reload_current_scene()
