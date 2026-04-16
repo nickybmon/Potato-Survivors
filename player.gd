@@ -5,7 +5,7 @@ const SPEED := 120.0
 const ARENA_MIN := Vector2(80.0, 60.0)
 const ARENA_MAX := Vector2(1200.0, 660.0)
 const CENTER := Vector2(640.0, 360.0)
-const GUN_ORBIT_RADIUS := 14.0
+const GUN_ORBIT_RADIUS := 20.0
 
 @onready var _visual: AnimatedSprite2D = $Visual
 @onready var _gun: Sprite2D = $Gun
@@ -69,4 +69,3 @@ func _aim_gun() -> void:
 		var angle: float = (target_pos - global_position).angle()
 		_gun.position = Vector2(cos(angle), sin(angle)) * GUN_ORBIT_RADIUS
 		_gun.rotation = angle
-		_gun.flip_v = absf(angle) > PI * 0.5
