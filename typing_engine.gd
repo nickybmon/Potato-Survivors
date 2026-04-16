@@ -1,6 +1,7 @@
 extends Node
 
 signal word_completed(enemy: Node2D)
+signal letter_typed(enemy: Node2D)
 signal progress_updated(word: String, progress: int)
 
 var _target: Node2D = null
@@ -41,6 +42,10 @@ func _find_target(ch: String) -> void:
 			_progress = 1
 			enemy.update_display(_progress)
 			progress_updated.emit(enemy.word, _progress)
+			if _progress >= enemy.word.length():
+				_destroy_target()
+			else:
+				letter_typed.emit(_target)
 			return
 
 
@@ -52,6 +57,8 @@ func _advance(ch: String) -> void:
 		progress_updated.emit(word, _progress)
 		if _progress >= word.length():
 			_destroy_target()
+		else:
+			letter_typed.emit(_target)
 	else:
 		_target.update_display(0)
 		_target = null
