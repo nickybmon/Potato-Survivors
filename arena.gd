@@ -9,6 +9,7 @@ var _lives: int = STARTING_LIVES
 
 func _ready() -> void:
 	$TypingEngine.word_completed.connect(_on_word_completed)
+	$TypingEngine.letter_typed.connect(_on_letter_typed)
 	$TypingEngine.progress_updated.connect($HUD.update_typed)
 	$WaveManager.wave_started.connect($HUD.update_wave)
 	$WaveManager.enemy_reached_center.connect(_on_enemy_reached_center)
@@ -25,11 +26,17 @@ func _start_music() -> void:
 		$Music.play()
 
 
+func _on_letter_typed(enemy: Node2D) -> void:
+	var bullet: Node2D = BulletScene.instantiate()
+	bullet.setup($Player.global_position, enemy, false)
+	add_child(bullet)
+
+
 func _on_word_completed(enemy: Node2D) -> void:
 	_score += 10
 	$HUD.update_score(_score)
 	var bullet: Node2D = BulletScene.instantiate()
-	bullet.setup($Player.global_position, enemy)
+	bullet.setup($Player.global_position, enemy, true)
 	add_child(bullet)
 
 
