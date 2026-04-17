@@ -161,6 +161,8 @@ func _spawn_sentence_group() -> void:
 	, CONNECT_ONE_SHOT)
 
 	await get_tree().process_frame
+	if not is_inside_tree():
+		return
 	group_node.start_spawning(_get_enemies_container())
 
 
@@ -217,6 +219,8 @@ func _on_boss_died() -> void:
 	_wave_clearing = true
 	StatsTracker.pause_timer()
 	await get_tree().create_timer(1.5).timeout
+	if not is_inside_tree():
+		return
 	_start_wave()
 
 
@@ -244,11 +248,17 @@ func _check_wave_clear() -> void:
 		_boss_pending = true
 		_wave_clearing = false
 		await get_tree().create_timer(0.8).timeout
+		if not is_inside_tree():
+			return
 		boss_incoming.emit(current_wave)
 		await get_tree().create_timer(1.2).timeout
+		if not is_inside_tree():
+			return
 		_spawn_boss()
 	else:
 		await get_tree().create_timer(0.5).timeout
+		if not is_inside_tree():
+			return
 		_start_wave()
 
 

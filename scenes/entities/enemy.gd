@@ -54,4 +54,5 @@ func die() -> void:
 	$WordLabel.visible = false
 	$DeathSound.play()
 	await get_tree().create_timer(0.35).timeout
-	queue_free()
+	if is_inside_tree():
+		queue_free()

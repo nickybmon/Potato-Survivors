@@ -66,12 +66,16 @@ func _go_main_menu() -> void:
 
 
 func _on_letter_typed(enemy: Node2D) -> void:
+	if not is_instance_valid(enemy):
+		return
 	var bullet: Node2D = BulletScene.instantiate()
 	bullet.setup($Player.global_position, enemy, false)
 	add_child(bullet)
 
 
 func _on_word_completed(enemy: Node2D) -> void:
+	if not is_instance_valid(enemy):
+		return
 	_score += 10
 	$HUD.update_score(_score)
 	var bullet: Node2D = BulletScene.instantiate()

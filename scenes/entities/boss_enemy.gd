@@ -89,12 +89,16 @@ func die() -> void:
 		return
 	_dead = true
 	died.emit()
+	if not is_inside_tree():
+		queue_free()
+		return
 	$Visual.play("dead")
 	$WordLabel.visible = false
 	$DeathSound.play()
 	_flash_screen()
 	await get_tree().create_timer(0.5).timeout
-	queue_free()
+	if is_inside_tree():
+		queue_free()
 
 
 func _flash_screen() -> void:
