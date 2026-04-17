@@ -1,6 +1,6 @@
 # Type Twin Sticks
 
-A twin-stick survivor-style typing game built in Godot 4. Enemies spawn at the edges of the arena and walk toward the center. Type their word to destroy them before they reach you.
+A monster wave survivor-style typing game built in Godot 4 using Brotato assets. Enemies spawn at the edges of the arena and walk toward the center. Type their word to destroy them before they reach you.
 
 ## How to Play
 
