@@ -10,8 +10,11 @@ signal sentence_mistype(pos: int)
 signal sentence_backspace(pos: int)
 signal sentence_completed(group: Node2D)
 
+const RELOAD_SFX_PATH := "res://resources/audio/dragon-studio-gun-reload-504026.mp3"
+
 var _target: Node2D = null
 var _progress: int = 0
+var _word_complete_pending: bool = false  # true when all letters typed, awaiting spacebar
 
 # Sentence mode state
 var _mode: String = "word"        # "word" | "sentence"
@@ -21,18 +24,31 @@ var _sentence_group: Node2D = null
 var _sentence_word_idx: int = 0    # which word in the sentence we're currently on
 var _sentence_words: Array[String] = []
 var _sentence_word_start: int = 0  # char offset in _sentence where current word starts
+var _sentence_word_pending: bool = false  # true when a word is fully typed, awaiting spacebar
+
+var _sfx: AudioStreamPlayer
+
+
+func _ready() -> void:
+	_sfx = AudioStreamPlayer.new()
+	_sfx.volume_db = 0.0
+	add_child(_sfx)
+	var stream := load(RELOAD_SFX_PATH)
+	_sfx.stream = stream
 
 
 func set_mode(m: String) -> void:
 	_mode = m
 	_target = null
 	_progress = 0
+	_word_complete_pending = false
 	_sentence = ""
 	_sentence_progress = 0
 	_sentence_group = null
 	_sentence_word_idx = 0
 	_sentence_words.clear()
 	_sentence_word_start = 0
+	_sentence_word_pending = false
 	progress_updated.emit("", 0)
 
 
@@ -47,6 +63,7 @@ func start_sentence(sentence: String, group: Node2D) -> void:
 		if not w.is_empty():
 			_sentence_words.append(w)
 	_sentence_word_start = 0
+	_sentence_word_pending = false
 	_target = null
 	_progress = 0
 
@@ -71,6 +88,15 @@ func _unhandled_input(event: InputEvent) -> void:
 		_handle_sentence_input(key_event)
 		return
 
+	# Word mode: spacebar fires a completed word
+	if key_event.keycode == KEY_SPACE:
+		if _word_complete_pending and _target != null:
+			_sfx.play()
+			_word_complete_pending = false
+			StatsTracker.record_word_complete(_target.word.length())
+			_destroy_target()
+		return
+
 	# Word mode: accept a-z (case-insensitive)
 	var unicode: int = key_event.unicode
 	if unicode >= 65 and unicode <= 90:
@@ -88,8 +114,43 @@ func _handle_sentence_input(key_event: InputEventKey) -> void:
 			sentence_backspace.emit(_sentence_progress)
 		return
 
+	# Spacebar: required to confirm each completed word
+	if key_event.keycode == KEY_SPACE:
+		if _sentence_word_pending:
+			_sfx.play()
+			_sentence_word_pending = false
+			# Kill the enemy for the word we just confirmed
+			if _sentence_word_idx < _sentence_words.size():
+				if is_instance_valid(_sentence_group):
+					var enemy: Node2D = _sentence_group.get_enemy(_sentence_word_idx)
+					if enemy != null and is_instance_valid(enemy):
+						StatsTracker.record_word_complete(_sentence_words[_sentence_word_idx].length())
+						word_completed.emit(enemy)
+				_sentence_word_idx += 1
+			# Advance past the space in the sentence string
+			if _sentence_progress < _sentence.length() and _sentence[_sentence_progress] == " ":
+				_sentence_progress += 1
+				sentence_char_typed.emit(_sentence_progress - 1)
+			# Check if the whole sentence is now done
+			if _sentence_progress >= _sentence.length():
+				var grp := _sentence_group
+				_sentence = ""
+				_sentence_progress = 0
+				_sentence_group = null
+				_sentence_word_idx = 0
+				_sentence_words.clear()
+				_sentence_word_start = 0
+				_sentence_word_pending = false
+				_mode = "word"
+				sentence_completed.emit(grp)
+		return
+
 	var unicode: int = key_event.unicode
 	if unicode == 0:
+		return
+
+	# Block letter input while waiting for spacebar confirmation
+	if _sentence_word_pending:
 		return
 
 	var ch := char(unicode)
@@ -113,28 +174,8 @@ func _handle_sentence_input(key_event: InputEventKey) -> void:
 			or _sentence[_sentence_progress] == " "
 		)
 		if at_word_end and _sentence_word_idx < _sentence_words.size():
-			# Kill the enemy corresponding to this word
-			if is_instance_valid(_sentence_group):
-				var enemy: Node2D = _sentence_group.get_enemy(_sentence_word_idx)
-				if enemy != null and is_instance_valid(enemy):
-					StatsTracker.record_word_complete(_sentence_words[_sentence_word_idx].length())
-					word_completed.emit(enemy)
-			_sentence_word_idx += 1
-			# Skip the space character
-			if _sentence_progress < _sentence.length() and _sentence[_sentence_progress] == " ":
-				_sentence_progress += 1
-				sentence_char_typed.emit(_sentence_progress - 1)
-
-		if _sentence_progress >= _sentence.length():
-			var grp := _sentence_group
-			_sentence = ""
-			_sentence_progress = 0
-			_sentence_group = null
-			_sentence_word_idx = 0
-			_sentence_words.clear()
-			_sentence_word_start = 0
-			_mode = "word"
-			sentence_completed.emit(grp)
+			# Mark pending — spacebar required to confirm and advance
+			_sentence_word_pending = true
 	else:
 		sentence_mistype.emit(_sentence_progress)
 		StatsTracker.record_total_key()
@@ -176,7 +217,8 @@ func _find_target(ch: String) -> void:
 	progress_updated.emit(best.word, _progress)
 	StatsTracker.record_correct_key()
 	if _progress >= best.word.length():
-		_destroy_target()
+		# Single-letter word — all letters typed, wait for spacebar
+		_word_complete_pending = true
 	else:
 		letter_typed.emit(_target)
 
@@ -189,12 +231,13 @@ func _advance(ch: String) -> void:
 		progress_updated.emit(word, _progress)
 		StatsTracker.record_correct_key()
 		if _progress >= word.length():
-			StatsTracker.record_word_complete(word.length())
-			_destroy_target()
+			# All letters typed — wait for spacebar to confirm the kill
+			_word_complete_pending = true
 		else:
 			letter_typed.emit(_target)
 	else:
 		StatsTracker.record_total_key()
+		_word_complete_pending = false
 		_target.update_display(0)
 		_target = null
 		_progress = 0
