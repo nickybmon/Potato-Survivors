@@ -1,0 +1,109 @@
+[gd_scene format=3 uid="uid://main_menu"]
+
+[ext_resource type="Script" path="res://scenes/ui/main_menu.gd" id="1"]
+[ext_resource type="Texture2D" uid="uid://dlcfc5sdreeld" path="res://resources/sprites/sPlayerIdle_strip4.png" id="2"]
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_mi0"]
+atlas = ExtResource("2")
+region = Rect2(0, 0, 40, 40)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_mi1"]
+atlas = ExtResource("2")
+region = Rect2(40, 0, 40, 40)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_mi2"]
+atlas = ExtResource("2")
+region = Rect2(80, 0, 40, 40)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_mi3"]
+atlas = ExtResource("2")
+region = Rect2(120, 0, 40, 40)
+
+[sub_resource type="SpriteFrames" id="SpriteFrames_menu_idle"]
+animations = [{
+"frames": [{
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_mi0")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_mi1")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_mi2")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_mi3")
+}],
+"loop": true,
+"name": &"idle",
+"speed": 8.0
+}]
+
+[node name="MainMenu" type="Control"]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+script = ExtResource("1")
+
+[node name="Background" type="ColorRect" parent="."]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+color = Color(0.08, 0.08, 0.1, 1)
+
+[node name="PlayerSprite" type="AnimatedSprite2D" parent="."]
+position = Vector2(640, 185)
+scale = Vector2(3, 3)
+sprite_frames = SubResource("SpriteFrames_menu_idle")
+animation = &"idle"
+autoplay = "idle"
+
+[node name="VBox" type="VBoxContainer" parent="."]
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -180.0
+offset_top = -55.0
+offset_right = 180.0
+offset_bottom = 345.0
+theme_override_constants/separation = 16
+
+[node name="Title" type="Label" parent="VBox"]
+layout_mode = 2
+theme_override_font_sizes/font_size = 52
+text = "POTATO SURVIVORS"
+horizontal_alignment = 1
+
+[node name="Spacer" type="Control" parent="VBox"]
+layout_mode = 2
+custom_minimum_size = Vector2(0, 20)
+
+[node name="PlayBtn" type="Button" parent="VBox"]
+layout_mode = 2
+theme_override_font_sizes/font_size = 26
+text = "Play"
+
+[node name="PracticeBtn" type="Button" parent="VBox"]
+layout_mode = 2
+theme_override_font_sizes/font_size = 26
+text = "Practice"
+
+[node name="SettingsBtn" type="Button" parent="VBox"]
+layout_mode = 2
+theme_override_font_sizes/font_size = 26
+text = "Settings"
+
+[node name="QuitBtn" type="Button" parent="VBox"]
+layout_mode = 2
+theme_override_font_sizes/font_size = 26
+text = "Quit"
+
+[connection signal="pressed" from="VBox/PlayBtn" to="." method="_on_play_pressed"]
+[connection signal="pressed" from="VBox/PracticeBtn" to="." method="_on_practice_pressed"]
+[connection signal="pressed" from="VBox/SettingsBtn" to="." method="_on_settings_pressed"]
+[connection signal="pressed" from="VBox/QuitBtn" to="." method="_on_quit_pressed"]

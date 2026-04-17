@@ -6,6 +6,7 @@ signal reached_center
 signal died
 
 var word: String = ""
+var speed_override: float = -1.0   # set before add_child; -1 means use SPEED
 var _dead: bool = false
 
 
@@ -19,7 +20,8 @@ func _process(delta: float) -> void:
 		return
 	var target_pos := _get_player_pos()
 	var direction := (target_pos - global_position).normalized()
-	position += direction * SPEED * delta
+	var spd := speed_override if speed_override > 0.0 else SPEED
+	position += direction * spd * delta
 	$Visual.flip_h = direction.x < 0.0
 	if global_position.distance_to(target_pos) < 16.0:
 		reached_center.emit()

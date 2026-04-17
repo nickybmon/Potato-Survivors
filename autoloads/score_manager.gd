@@ -46,4 +46,7 @@ func _load() -> void:
 	if result is Array:
 		_scores.clear()
 		for v: Variant in result:
-			_scores.append(int(v))
+			var s := int(v)
+			if s > 0:
+				_scores.append(s)
+		_save()  # Re-save immediately to purge any stored zeros

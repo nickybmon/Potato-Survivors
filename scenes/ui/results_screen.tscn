@@ -1,0 +1,132 @@
+[gd_scene format=3 uid="uid://results_screen"]
+
+[ext_resource type="Script" path="res://scenes/ui/results_screen.gd" id="1"]
+
+[node name="ResultsScreen" type="Control"]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+script = ExtResource("1")
+
+[node name="Background" type="ColorRect" parent="."]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+color = Color(0.1, 0.1, 0.12, 1)
+
+[node name="Center" type="CenterContainer" parent="."]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+
+[node name="VBox" type="VBoxContainer" parent="Center"]
+layout_mode = 2
+custom_minimum_size = Vector2(520, 0)
+theme_override_constants/separation = 10
+
+[node name="WPMLabel" type="Label" parent="Center/VBox"]
+layout_mode = 2
+theme_override_font_sizes/font_size = 80
+theme_override_colors/font_color = Color(0.9, 0.75, 0.2, 1)
+text = "0"
+horizontal_alignment = 1
+
+[node name="WPMCaption" type="Label" parent="Center/VBox"]
+layout_mode = 2
+theme_override_font_sizes/font_size = 15
+theme_override_colors/font_color = Color(0.6, 0.6, 0.6, 1)
+text = "wpm"
+horizontal_alignment = 1
+
+[node name="StatsRow" type="HBoxContainer" parent="Center/VBox"]
+layout_mode = 2
+alignment = 1
+theme_override_constants/separation = 48
+
+[node name="RawLabel" type="Label" parent="Center/VBox/StatsRow"]
+layout_mode = 2
+theme_override_font_sizes/font_size = 20
+text = "Raw\n0"
+horizontal_alignment = 1
+
+[node name="AccLabel" type="Label" parent="Center/VBox/StatsRow"]
+layout_mode = 2
+theme_override_font_sizes/font_size = 20
+text = "Acc\n100%"
+horizontal_alignment = 1
+
+[node name="ConsLabel" type="Label" parent="Center/VBox/StatsRow"]
+layout_mode = 2
+theme_override_font_sizes/font_size = 20
+text = "Con\n100%"
+horizontal_alignment = 1
+
+[node name="CharsLabel" type="Label" parent="Center/VBox"]
+layout_mode = 2
+theme_override_font_sizes/font_size = 15
+theme_override_colors/font_color = Color(0.6, 0.6, 0.6, 1)
+text = "correct 0   incorrect 0"
+horizontal_alignment = 1
+
+[node name="TimeLabel" type="Label" parent="Center/VBox"]
+layout_mode = 2
+theme_override_font_sizes/font_size = 15
+theme_override_colors/font_color = Color(0.6, 0.6, 0.6, 1)
+text = "Time  0:00"
+horizontal_alignment = 1
+
+[node name="TagLabel" type="Label" parent="Center/VBox"]
+layout_mode = 2
+theme_override_font_sizes/font_size = 13
+theme_override_colors/font_color = Color(0.45, 0.45, 0.5, 1)
+text = "survival"
+horizontal_alignment = 1
+
+[node name="HSep" type="HSeparator" parent="Center/VBox"]
+layout_mode = 2
+
+[node name="LeaderboardSection" type="VBoxContainer" parent="Center/VBox"]
+layout_mode = 2
+theme_override_constants/separation = 3
+
+[node name="BoardTitle" type="Label" parent="Center/VBox/LeaderboardSection"]
+layout_mode = 2
+theme_override_font_sizes/font_size = 16
+text = "Top 10"
+horizontal_alignment = 1
+
+[node name="ScoreList" type="VBoxContainer" parent="Center/VBox/LeaderboardSection"]
+layout_mode = 2
+
+[node name="HSep2" type="HSeparator" parent="Center/VBox"]
+layout_mode = 2
+
+[node name="ButtonRow" type="HBoxContainer" parent="Center/VBox"]
+layout_mode = 2
+alignment = 1
+theme_override_constants/separation = 16
+
+[node name="RetryBtn" type="Button" parent="Center/VBox/ButtonRow"]
+layout_mode = 2
+custom_minimum_size = Vector2(130, 44)
+theme_override_font_sizes/font_size = 20
+text = "Retry"
+
+[node name="SettingsBtn" type="Button" parent="Center/VBox/ButtonRow"]
+layout_mode = 2
+custom_minimum_size = Vector2(130, 44)
+theme_override_font_sizes/font_size = 20
+text = "Settings"
+
+[node name="MainMenuBtn" type="Button" parent="Center/VBox/ButtonRow"]
+layout_mode = 2
+custom_minimum_size = Vector2(130, 44)
+theme_override_font_sizes/font_size = 20
+text = "Main Menu"
+
+[connection signal="pressed" from="Center/VBox/ButtonRow/RetryBtn" to="." method="_on_retry_pressed"]
+[connection signal="pressed" from="Center/VBox/ButtonRow/SettingsBtn" to="." method="_on_settings_pressed"]
+[connection signal="pressed" from="Center/VBox/ButtonRow/MainMenuBtn" to="." method="_on_main_menu_pressed"]

@@ -1,0 +1,90 @@
+[gd_scene format=3]
+
+[ext_resource type="Script" path="res://scenes/entities/enemy.gd" id="1"]
+[ext_resource type="Texture2D" uid="uid://c3ukh744cw3ml" path="res://resources/sprites/sEnemy_strip7.png" id="2"]
+[ext_resource type="Texture2D" uid="uid://da62yx7yglduo" path="res://resources/sprites/sEnemyDead.png" id="3"]
+[ext_resource type="AudioStream" uid="uid://f56an75ognrf" path="res://resources/audio/aDeath.wav" id="4"]
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_ew0"]
+atlas = ExtResource("2")
+region = Rect2(0, 0, 40, 40)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_ew1"]
+atlas = ExtResource("2")
+region = Rect2(40, 0, 40, 40)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_ew2"]
+atlas = ExtResource("2")
+region = Rect2(80, 0, 40, 40)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_ew3"]
+atlas = ExtResource("2")
+region = Rect2(120, 0, 40, 40)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_ew4"]
+atlas = ExtResource("2")
+region = Rect2(160, 0, 40, 40)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_ew5"]
+atlas = ExtResource("2")
+region = Rect2(200, 0, 40, 40)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_ew6"]
+atlas = ExtResource("2")
+region = Rect2(240, 0, 40, 40)
+
+[sub_resource type="SpriteFrames" id="SpriteFrames_enemy"]
+animations = [{
+"frames": [{
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_ew0")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_ew1")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_ew2")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_ew3")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_ew4")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_ew5")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_ew6")
+}],
+"loop": true,
+"name": &"walk",
+"speed": 10.0
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": ExtResource("3")
+}],
+"loop": false,
+"name": &"dead",
+"speed": 1.0
+}]
+
+[node name="Enemy" type="Node2D"]
+script = ExtResource("1")
+
+[node name="Visual" type="AnimatedSprite2D" parent="."]
+sprite_frames = SubResource("SpriteFrames_enemy")
+autoplay = "walk"
+
+[node name="WordLabel" type="Label" parent="."]
+offset_left = -60.0
+offset_top = -44.0
+offset_right = 60.0
+offset_bottom = -24.0
+horizontal_alignment = 1
+theme_override_font_sizes/font_size = 14
+
+[node name="DeathSound" type="AudioStreamPlayer" parent="."]
+stream = ExtResource("4")
+volume_db = -4.0

@@ -1,14 +1,15 @@
 [gd_scene format=3 uid="uid://cnbucnnkbpqrv"]
 
-[ext_resource type="Script" uid="uid://cmxs3qq6qoocx" path="res://arena.gd" id="1"]
-[ext_resource type="Script" uid="uid://coogjy7xfmey4" path="res://typing_engine.gd" id="2"]
-[ext_resource type="Script" uid="uid://dgwaxttgi0qss" path="res://wave_manager.gd" id="3"]
-[ext_resource type="Script" uid="uid://be1q8ca13caxb" path="res://hud.gd" id="4"]
-[ext_resource type="Texture2D" uid="uid://bkme3ohtjw0c5" path="res://Assets/topdown_shooter_assets/sWall.png" id="5"]
-[ext_resource type="Texture2D" uid="uid://dlcfc5sdreeld" path="res://Assets/topdown_shooter_assets/sPlayerIdle_strip4.png" id="6"]
-[ext_resource type="Texture2D" uid="uid://dem8pcp358rhw" path="res://Assets/topdown_shooter_assets/sPlayerRun_strip7.png" id="7"]
-[ext_resource type="Texture2D" uid="uid://cg5snvij6h4sn" path="res://Assets/topdown_shooter_assets/sGun.png" id="8"]
-[ext_resource type="Script" uid="uid://dux8gkm2oj1q2" path="res://player.gd" id="9"]
+[ext_resource type="Script" uid="uid://cmxs3qq6qoocx" path="res://scenes/arena/arena.gd" id="1"]
+[ext_resource type="Script" uid="uid://coogjy7xfmey4" path="res://autoloads/typing_engine.gd" id="2"]
+[ext_resource type="Script" uid="uid://dgwaxttgi0qss" path="res://scenes/arena/wave_manager.gd" id="3"]
+[ext_resource type="Script" uid="uid://be1q8ca13caxb" path="res://scenes/ui/hud.gd" id="4"]
+[ext_resource type="Script" path="res://scenes/ui/pause_menu.gd" id="10"]
+[ext_resource type="Texture2D" uid="uid://bkme3ohtjw0c5" path="res://resources/sprites/sWall.png" id="5"]
+[ext_resource type="Texture2D" uid="uid://dlcfc5sdreeld" path="res://resources/sprites/sPlayerIdle_strip4.png" id="6"]
+[ext_resource type="Texture2D" uid="uid://dem8pcp358rhw" path="res://resources/sprites/sPlayerRun_strip7.png" id="7"]
+[ext_resource type="Texture2D" uid="uid://cg5snvij6h4sn" path="res://resources/sprites/sGun.png" id="8"]
+[ext_resource type="Script" uid="uid://dux8gkm2oj1q2" path="res://scenes/entities/player.gd" id="9"]
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_pi0"]
 atlas = ExtResource("6")
@@ -120,8 +121,10 @@ sprite_frames = SubResource("SpriteFrames_player")
 animation = &"idle"
 autoplay = "idle"
 
-[node name="Music" type="AudioStreamPlayer" parent="." unique_id=548338411]
-volume_db = -10.0
+
+[node name="WPMTimer" type="Timer" parent="."]
+wait_time = 0.5
+autostart = true
 
 [node name="Enemies" type="Node" parent="." unique_id=1779727136]
 
@@ -168,4 +171,87 @@ offset_right = 840.0
 offset_bottom = 710.0
 theme_override_font_sizes/normal_font_size = 24
 bbcode_enabled = true
+
+[node name="WPMLabel" type="Label" parent="HUD"]
+offset_left = 10.0
+offset_top = 680.0
+offset_right = 260.0
+offset_bottom = 710.0
+theme_override_font_sizes/font_size = 18
+theme_override_colors/font_color = Color(0.9, 0.75, 0.2, 1)
+text = ""
+
+[node name="SentenceBar" type="RichTextLabel" parent="HUD"]
+offset_left = 80.0
+offset_top = 620.0
+offset_right = 1200.0
+offset_bottom = 660.0
+theme_override_font_sizes/normal_font_size = 20
+bbcode_enabled = true
+
+[node name="PauseMenu" type="CanvasLayer" parent="."]
+process_mode = 3
+script = ExtResource("10")
+
+[node name="Overlay" type="ColorRect" parent="PauseMenu"]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_right = 1280.0
+offset_bottom = 720.0
+color = Color(0, 0, 0, 0.6)
+mouse_filter = 2
+process_mode = 3
+
+[node name="Panel" type="PanelContainer" parent="PauseMenu"]
+layout_mode = 3
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -160.0
+offset_top = -110.0
+offset_right = 160.0
+offset_bottom = 110.0
+mouse_filter = 0
+process_mode = 3
+
+[node name="VBox" type="VBoxContainer" parent="PauseMenu/Panel"]
+layout_mode = 2
+theme_override_constants/separation = 12
+process_mode = 3
+
+[node name="Title" type="Label" parent="PauseMenu/Panel/VBox"]
+layout_mode = 2
+theme_override_font_sizes/font_size = 34
+text = "PAUSED"
+horizontal_alignment = 1
+process_mode = 3
+
+[node name="ResumeBtn" type="Button" parent="PauseMenu/Panel/VBox"]
+layout_mode = 2
+theme_override_font_sizes/font_size = 22
+focus_mode = 0
+text = "Resume"
+process_mode = 3
+
+[node name="SettingsBtn" type="Button" parent="PauseMenu/Panel/VBox"]
+layout_mode = 2
+theme_override_font_sizes/font_size = 22
+focus_mode = 0
+text = "Settings"
+process_mode = 3
+
+[node name="MainMenuBtn" type="Button" parent="PauseMenu/Panel/VBox"]
+layout_mode = 2
+theme_override_font_sizes/font_size = 22
+focus_mode = 0
+text = "Main Menu"
+process_mode = 3
+
+[connection signal="pressed" from="PauseMenu/Panel/VBox/ResumeBtn" to="PauseMenu" method="_on_resume_pressed"]
+[connection signal="pressed" from="PauseMenu/Panel/VBox/SettingsBtn" to="PauseMenu" method="_on_settings_pressed"]
+[connection signal="pressed" from="PauseMenu/Panel/VBox/MainMenuBtn" to="PauseMenu" method="_on_main_menu_pressed"]
 
