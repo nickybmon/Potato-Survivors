@@ -8,6 +8,7 @@ signal died
 var word: String = ""
 var speed_override: float = -1.0   # set before add_child; -1 means use SPEED
 var _dead: bool = false
+var _spacebar_tween: Tween = null
 
 
 func _ready() -> void:
@@ -36,10 +37,28 @@ func _get_player_pos() -> Vector2:
 
 
 func update_display(progress: int) -> void:
+	_clear_spacebar_prompt()
 	if progress == 0:
 		$WordLabel.text = word
 	else:
 		$WordLabel.text = word.substr(progress)
+
+
+func show_spacebar_prompt() -> void:
+	_clear_spacebar_prompt()
+	$WordLabel.text = "[ SPACE ]"
+	$WordLabel.add_theme_color_override("font_color", Color(0.2, 1.0, 0.4))
+	_spacebar_tween = create_tween().set_loops()
+	_spacebar_tween.tween_property($WordLabel, "modulate:a", 0.25, 0.2)
+	_spacebar_tween.tween_property($WordLabel, "modulate:a", 1.0, 0.2)
+
+
+func _clear_spacebar_prompt() -> void:
+	if _spacebar_tween != null and _spacebar_tween.is_valid():
+		_spacebar_tween.kill()
+		_spacebar_tween = null
+	$WordLabel.modulate.a = 1.0
+	$WordLabel.remove_theme_color_override("font_color")
 
 
 func die() -> void:

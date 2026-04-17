@@ -32,6 +32,8 @@ func start_spawning(enemies_container: Node) -> void:
 	var timer := get_tree().create_timer(0.0)
 	for i: int in _words.size():
 		await timer.timeout
+		if not is_inside_tree():
+			return
 		_spawn_word(i, positions[i], enemies_container)
 		timer = get_tree().create_timer(SPAWN_STAGGER)
 

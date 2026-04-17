@@ -155,7 +155,8 @@ func _spawn_sentence_group() -> void:
 
 	typing_engine.sentence_completed.connect(
 		func(_grp: Node2D):
-			group_node.kill_all()
+			if is_instance_valid(group_node):
+				group_node.kill_all()
 			if hud.has_method("clear_sentence_bar"):
 				hud.clear_sentence_bar()
 	, CONNECT_ONE_SHOT)

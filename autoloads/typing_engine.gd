@@ -10,7 +10,7 @@ signal sentence_mistype(pos: int)
 signal sentence_backspace(pos: int)
 signal sentence_completed(group: Node2D)
 
-const RELOAD_SFX_PATH := "res://resources/audio/dragon-studio-gun-reload-504026.mp3"
+const RELOAD_SFX_PATH := "res://resources/audio/freesound_community-pistol-cock-6014.mp3"
 
 var _target: Node2D = null
 var _progress: int = 0
@@ -90,11 +90,15 @@ func _unhandled_input(event: InputEvent) -> void:
 
 	# Word mode: spacebar fires a completed word
 	if key_event.keycode == KEY_SPACE:
+		_sfx.play()
 		if _word_complete_pending and _target != null:
-			_sfx.play()
 			_word_complete_pending = false
 			StatsTracker.record_word_complete(_target.word.length())
 			_destroy_target()
+		return
+
+	# Block letter input while waiting for spacebar confirmation
+	if _word_complete_pending:
 		return
 
 	# Word mode: accept a-z (case-insensitive)
@@ -116,8 +120,8 @@ func _handle_sentence_input(key_event: InputEventKey) -> void:
 
 	# Spacebar: required to confirm each completed word
 	if key_event.keycode == KEY_SPACE:
+		_sfx.play()
 		if _sentence_word_pending:
-			_sfx.play()
 			_sentence_word_pending = false
 			# Kill the enemy for the word we just confirmed
 			if _sentence_word_idx < _sentence_words.size():
@@ -176,6 +180,10 @@ func _handle_sentence_input(key_event: InputEventKey) -> void:
 		if at_word_end and _sentence_word_idx < _sentence_words.size():
 			# Mark pending — spacebar required to confirm and advance
 			_sentence_word_pending = true
+			if is_instance_valid(_sentence_group):
+				var pending_enemy: Node2D = _sentence_group.get_enemy(_sentence_word_idx)
+				if pending_enemy != null and is_instance_valid(pending_enemy):
+					pending_enemy.show_spacebar_prompt()
 	else:
 		sentence_mistype.emit(_sentence_progress)
 		StatsTracker.record_total_key()
@@ -219,6 +227,7 @@ func _find_target(ch: String) -> void:
 	if _progress >= best.word.length():
 		# Single-letter word — all letters typed, wait for spacebar
 		_word_complete_pending = true
+		best.show_spacebar_prompt()
 	else:
 		letter_typed.emit(_target)
 
@@ -233,6 +242,7 @@ func _advance(ch: String) -> void:
 		if _progress >= word.length():
 			# All letters typed — wait for spacebar to confirm the kill
 			_word_complete_pending = true
+			_target.show_spacebar_prompt()
 		else:
 			letter_typed.emit(_target)
 	else:
@@ -245,6 +255,8 @@ func _advance(ch: String) -> void:
 
 
 func get_target() -> Node2D:
+	if not is_instance_valid(_target):
+		_target = null
 	return _target
 
 
