@@ -120,7 +120,7 @@ func _spawn_enemy() -> void:
 	enemy.position = _random_edge()
 	enemy.add_to_group("enemies")
 	enemy.reached_center.connect(func(): enemy_reached_center.emit())
-	enemy.died.connect(_check_wave_clear.unbind(0))
+	enemy.died.connect(_check_wave_clear)
 	_get_enemies_container().add_child(enemy)
 
 
@@ -130,7 +130,7 @@ func _spawn_phrase_enemy() -> void:
 	enemy.position = _random_edge()
 	enemy.add_to_group("enemies")
 	enemy.reached_center.connect(func(): enemy_reached_center.emit())
-	enemy.died.connect(_check_wave_clear.unbind(0))
+	enemy.died.connect(_check_wave_clear)
 	_get_enemies_container().add_child(enemy)
 
 

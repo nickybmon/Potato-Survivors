@@ -47,6 +47,9 @@ func die() -> void:
 		return
 	_dead = true
 	died.emit()
+	if not is_inside_tree():
+		queue_free()
+		return
 	$Visual.play("dead")
 	$WordLabel.visible = false
 	$DeathSound.play()
