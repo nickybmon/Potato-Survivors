@@ -1,7 +1,7 @@
-[gd_scene format=3 uid="uid://main_menu"]
+[gd_scene format=3 uid="uid://d1phpwhsiokx0"]
 
-[ext_resource type="Script" path="res://scenes/ui/main_menu.gd" id="1"]
-[ext_resource type="Texture2D" uid="uid://dlcfc5sdreeld" path="res://resources/sprites/sPlayerIdle_strip4.png" id="2"]
+[ext_resource type="Script" uid="uid://f47u1l35l4d0" path="res://scenes/ui/main_menu.gd" id="1"]
+[ext_resource type="Texture2D" uid="uid://btayhjhfkvmfk" path="res://resources/sprites/sPlayerIdle_strip4.png" id="2"]
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_mi0"]
 atlas = ExtResource("2")
@@ -39,28 +39,32 @@ animations = [{
 "speed": 8.0
 }]
 
-[node name="MainMenu" type="Control"]
+[node name="MainMenu" type="Control" unique_id=1608680833]
 layout_mode = 3
 anchors_preset = 15
 anchor_right = 1.0
 anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
 script = ExtResource("1")
 
-[node name="Background" type="ColorRect" parent="."]
+[node name="Background" type="ColorRect" parent="." unique_id=1603412721]
 layout_mode = 1
 anchors_preset = 15
 anchor_right = 1.0
 anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
 color = Color(0.08, 0.08, 0.1, 1)
 
-[node name="PlayerSprite" type="AnimatedSprite2D" parent="."]
+[node name="PlayerSprite" type="AnimatedSprite2D" parent="." unique_id=1248823124]
 position = Vector2(640, 185)
 scale = Vector2(3, 3)
 sprite_frames = SubResource("SpriteFrames_menu_idle")
 animation = &"idle"
 autoplay = "idle"
 
-[node name="VBox" type="VBoxContainer" parent="."]
+[node name="VBox" type="VBoxContainer" parent="." unique_id=2098936925]
 layout_mode = 1
 anchors_preset = 8
 anchor_left = 0.5
@@ -71,34 +75,36 @@ offset_left = -180.0
 offset_top = -55.0
 offset_right = 180.0
 offset_bottom = 345.0
+grow_horizontal = 2
+grow_vertical = 2
 theme_override_constants/separation = 16
 
-[node name="Title" type="Label" parent="VBox"]
+[node name="Title" type="Label" parent="VBox" unique_id=2055813371]
 layout_mode = 2
 theme_override_font_sizes/font_size = 52
 text = "POTATO SURVIVORS"
 horizontal_alignment = 1
 
-[node name="Spacer" type="Control" parent="VBox"]
-layout_mode = 2
+[node name="Spacer" type="Control" parent="VBox" unique_id=356016671]
 custom_minimum_size = Vector2(0, 20)
+layout_mode = 2
 
-[node name="PlayBtn" type="Button" parent="VBox"]
+[node name="PlayBtn" type="Button" parent="VBox" unique_id=1626852825]
 layout_mode = 2
 theme_override_font_sizes/font_size = 26
 text = "Play"
 
-[node name="PracticeBtn" type="Button" parent="VBox"]
+[node name="PracticeBtn" type="Button" parent="VBox" unique_id=1522950225]
 layout_mode = 2
 theme_override_font_sizes/font_size = 26
 text = "Practice"
 
-[node name="SettingsBtn" type="Button" parent="VBox"]
+[node name="SettingsBtn" type="Button" parent="VBox" unique_id=224394008]
 layout_mode = 2
 theme_override_font_sizes/font_size = 26
 text = "Settings"
 
-[node name="QuitBtn" type="Button" parent="VBox"]
+[node name="QuitBtn" type="Button" parent="VBox" unique_id=1160535537]
 layout_mode = 2
 theme_override_font_sizes/font_size = 26
 text = "Quit"
