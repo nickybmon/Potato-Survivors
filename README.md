@@ -2,6 +2,10 @@
 
 A monster wave survivor-style typing game built in Godot 4 using Brotato assets. Enemies spawn at the edges of the arena and walk toward the center. Type their word to destroy them before they reach you.
 
+## Play in Browser
+
+**[potato-survivors.netlify.app](https://potato-survivors.netlify.app/)** — no download required.
+
 ![Gameplay screenshot 1](screenshots/gameplay1.png)
 ![Gameplay screenshot 2](screenshots/gameplay2.png)
 
@@ -13,7 +17,7 @@ A monster wave survivor-style typing game built in Godot 4 using Brotato assets.
 - Mistype and you lose your lock — start again
 - Survive as many waves as you can
 
-## Running the Game
+## Run Locally (Godot 4)
 
 1. Open the project in Godot 4
 2. Press **F6** to run the current scene, or set `arena.tscn` as the main scene and press **F5**
